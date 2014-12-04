@@ -20,11 +20,15 @@ define(['settings'], function(Settings) {
       datasources: {
         influxdb: {
           type: 'influxdb',
-          url: "{{.Env.INFLUXDB_URL}}/db/{{.Env.INFLUXDB_NAME}}"
+          url: "{{ .Env.INFLUXDB_URL }}/db/{{ .Env.INFLUXDB_NAME }}",
+          username: '{{ .Env.INFLUXDB_USER }}',
+          password: '{{ .Env.INFLUXDB_PASSWORD }}'
         },
         grafana: {
           type: 'influxdb',
-          url: "{{.Env.INFLUXDB_URL}}/db/grafana",
+          url: "{{ .Env.INFLUXDB_URL }}/db/grafana",
+          username: '{{ .Env.INFLUXDB_USER }}',
+          password: '{{ .Env.INFLUXDB_PASSWORD }}',
           grafanaDB: true
         },
       },
