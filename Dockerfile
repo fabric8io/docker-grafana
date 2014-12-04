@@ -9,7 +9,11 @@ ADD config.js.tmpl /opt/grafana/config.js.tmpl
 RUN wget -q -O - http://grafanarel.s3.amazonaws.com/grafana-${GRAFANA_VERSION}.tar.gz | gzip -dc | tar xv -C /opt && \
     mv /opt/grafana-${GRAFANA_VERSION}/* /opt/grafana
 
+RUN chown nobody /opt/grafana
+
 WORKDIR /opt/grafana
+
+USER nobody
 
 EXPOSE 3000
 
