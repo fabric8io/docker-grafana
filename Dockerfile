@@ -7,6 +7,9 @@ ENV GRAFANA_VERSION 1.9.1
 ENV INFLUXDB_NAME k8s
 ENV GRAFANA_DB_NAME grafana
 ENV GRAFANA_DEFAULT_DASHBOARD /dashboard/file/default.json
+ENV INFLUXDB_PROTO http
+ENV INFLUXDB_USER root
+ENV INFLUXDB_PASSWORD root
 
 COPY . /go/src/github.com/jimmidyson/docker-grafana
 
