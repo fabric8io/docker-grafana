@@ -10,6 +10,9 @@ ENV GRAFANA_VERSION 1.9.1
 ENV INFLUXDB_NAME k8s
 ENV GRAFANA_DB_NAME grafana
 ENV GRAFANA_DEFAULT_DASHBOARD /dashboard/file/default.json
+ENV INFLUXDB_PROTO http
+ENV INFLUXDB_USER root
+ENV INFLUXDB_PASSWORD root
 
 RUN mkdir /opt && \
     wget -q -O - http://grafanarel.s3.amazonaws.com/grafana-${GRAFANA_VERSION}.tar.gz | gzip -dc | tar xv -C /opt && \
