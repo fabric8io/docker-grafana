@@ -1,7 +1,7 @@
 # Grafana Docker Image
 
 This image runs [Grafana](http://grafana.org) listening on port 3000.
-The image weighs in at very lightweight ~12MB & requires only ~4MB RAM
+The image weighs in at very lightweight ~30MB & requires only ~4MB RAM
 to run as it uses a very small golang binary to serve the static files.
 
 The Grafana `config.js` is configured via the following environment
