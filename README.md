@@ -8,7 +8,7 @@ The Grafana `config.js` is configured via the following environment
 variables:
 
 * `INFLUXDB_URL` - the URL to the InfluxDB instance you want to connect to
-* `INFLUXDB_SERVICE_NAME` - the name of the Kubernetes InfluxDB service (default: INFLUXDB)
+* `INFLUXDB_SERVICE_NAME` - the name of the Kubernetes InfluxDB service (default: `INFLUXDB`)
 * `INFLUXDB_PROTO` - the protocol to use (default: `http`)
 * `INFLUXDB_NAME` - the name of the InfluxDB database to query (default: `k8s`)
 * `GRAFANA_DB_NAME` - the name of the InfluxDB database to use for Grafana dashboard storage (default: `grafana`)
