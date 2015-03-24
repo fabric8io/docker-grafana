@@ -1,19 +1,32 @@
-build/container: stage/grafana Dockerfile
-	docker build --no-cache -t grafana .
-	touch build/container
+NAME=grafana
+VERSION=$(shell cat VERSION)
 
-build/grafana: *.go
-	GOOS=linux GOARCH=amd64 go build -o build/grafana
-	GOOS=linux GOARCH=amd64 go test
+dev:
+	@docker build -f Dockerfile.dev -t $(NAME):dev .
+	@docker run --rm \
+		-v $(PWD):/go/src/github.com/jimmidyson/$(NAME) \
+		-e INFLUXDB_SERVICE_NAME=INFLUXDB \
+		-e INFLUXDB_SERVICE_HOST=172.30.17.94 \
+		-e INFLUXDB_SERVICE_PORT=8086 \
+		-e INFLUXDB_PROTO=http \
+		-e INFLUXDB_USER=root \
+		-e INFLUXDB_PASSWORD=root \
+		-p 3000:3000 \
+		$(NAME):dev
 
-stage/grafana: build/grafana
-	mkdir -p stage
-	cp build/grafana stage/grafana
+local: *.go
+	go build -ldflags "-X main.Version $(VERSION)-dev" -o build/$(NAME)
+
+build:
+	mkdir -p build
+	docker build -t $(NAME):$(VERSION) .
+	docker save $(NAME):$(VERSION) | gzip -9 > build/$(NAME)_$(VERSION).tgz
 
 release:
-	docker tag grafana jimmidyson/grafana
-	docker push jimmidyson/grafana
+	rm -rf release && mkdir release
+	go get github.com/progrium/gh-release/...
+	cp build/* release
+	gh-release create jimmidyson/$(NAME) $(VERSION) \
+		$(shell git rev-parse --abbrev-ref HEAD) $(VERSION)
 
-.PHONY: clean
-clean:
-	rm -rf build
+.PHONY: dev build release

@@ -26,7 +26,7 @@ define(['settings'], function(Settings) {
         },
         grafana: {
           type: 'influxdb',
-          url: "{{ .Env.INFLUXDB_URL }}/db/grafana",
+          url: "{{ .Env.INFLUXDB_URL }}/db/{{ .Env.GRAFANA_DB_NAME }}",
           username: '{{ .Env.INFLUXDB_USER }}',
           password: '{{ .Env.INFLUXDB_PASSWORD }}',
           grafanaDB: true
@@ -43,7 +43,7 @@ define(['settings'], function(Settings) {
       },
 
       // default home dashboard
-      default_route: '/dashboard/file/default.json',
+      default_route: '{{ .Env.GRAFANA_DEFAULT_DASHBOARD }}',
 
       // set to false to disable unsaved changes warning
       unsaved_changes_warning: true,

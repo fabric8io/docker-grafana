@@ -1,21 +1,30 @@
-FROM busybox:latest
+FROM gliderlabs/alpine:3.1
 MAINTAINER Jimmi Dyson <jimmidyson@gmail.com>
+ENTRYPOINT ["/opt/grafana/grafana"]
+EXPOSE 3000
 
-ENV GRAFANA_VERSION 1.9.0
+ENV GRAFANA_VERSION 1.9.1
+ENV INFLUXDB_NAME k8s
+ENV GRAFANA_DB_NAME grafana
+ENV GRAFANA_DEFAULT_DASHBOARD /dashboard/file/default.json
 
-ADD ./stage/grafana /opt/grafana/grafana
-ADD config.js.tmpl /opt/grafana/config.js.tmpl
+COPY . /go/src/github.com/jimmidyson/docker-grafana
 
-RUN wget -q -O - http://grafanarel.s3.amazonaws.com/grafana-${GRAFANA_VERSION}.tar.gz | gzip -dc | tar xv -C /opt && \
-    mv /opt/grafana-${GRAFANA_VERSION}/* /opt/grafana
+RUN apk-install go git mercurial ca-certificates openssl tar gzip \
+  && mkdir /opt \
+  && wget -q -O - http://grafanarel.s3.amazonaws.com/grafana-${GRAFANA_VERSION}.tar.gz | gzip -dc | tar xv -C /opt \
+  && mv /opt/grafana-${GRAFANA_VERSION} /opt/grafana \
+  && export GOPATH=/go \
+  && export PATH=${GOPATH}/bin:${PATH} \
+  && cd ${GOPATH}/src/github.com/jimmidyson/docker-grafana/ \
+  && go build -ldflags "-X main.Version $(cat VERSION)" -o /opt/grafana/grafana \
+  && rm -rf ${GOPATH} \
+  && apk del go git mercurial tar gzip \
+  && chown nobody:nobody /opt/grafana/
 
-RUN chown nobody /opt/grafana
+COPY config.js.tmpl /opt/grafana/config.js.tmpl
+COPY kubernetes-dashboard.json /opt/grafana/app/dashboards/kubernetes.json
 
 WORKDIR /opt/grafana
 
 USER nobody
-
-EXPOSE 3000
-
-ENTRYPOINT ["/opt/grafana/grafana"]
-CMD []
