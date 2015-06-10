@@ -1,4 +1,4 @@
-FROM gliderlabs/alpine:3.1
+FROM gliderlabs/alpine:3.2
 MAINTAINER Jimmi Dyson <jimmidyson@gmail.com>
 EXPOSE 80
 
@@ -21,6 +21,6 @@ RUN mkdir /opt && \
 COPY config.js.tmpl /opt/grafana/config.js.tmpl
 COPY kubernetes-dashboard.json /opt/grafana/app/dashboards/kubernetes.json
 
-WORKDIR ${GOPATH}/src/github.com/jimmidyson/grafana
+WORKDIR ${GOPATH}/src/github.com/fabric8io/grafana
 CMD go build -ldflags "-X main.Version dev" -o /opt/grafana/grafana \
   && cd /opt/grafana && exec /opt/grafana/grafana

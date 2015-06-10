@@ -1,4 +1,4 @@
-FROM gliderlabs/alpine:3.1
+FROM gliderlabs/alpine:3.2
 MAINTAINER Jimmi Dyson <jimmidyson@gmail.com>
 ENTRYPOINT ["/opt/grafana/grafana"]
 EXPOSE 80
@@ -11,7 +11,7 @@ ENV INFLUXDB_PROTO http
 ENV INFLUXDB_USER root
 ENV INFLUXDB_PASSWORD root
 
-COPY . /go/src/github.com/jimmidyson/docker-grafana
+COPY . /go/src/github.com/fabric8io/docker-grafana
 
 RUN apk-install go git mercurial ca-certificates openssl tar gzip \
   && mkdir /opt \
@@ -19,7 +19,7 @@ RUN apk-install go git mercurial ca-certificates openssl tar gzip \
   && mv /opt/grafana-${GRAFANA_VERSION} /opt/grafana \
   && export GOPATH=/go \
   && export PATH=${GOPATH}/bin:${PATH} \
-  && cd ${GOPATH}/src/github.com/jimmidyson/docker-grafana/ \
+  && cd ${GOPATH}/src/github.com/fabric8io/docker-grafana/ \
   && go build -ldflags "-X main.Version $(cat VERSION)" -o /opt/grafana/grafana \
   && rm -rf ${GOPATH} \
   && apk del go git mercurial tar gzip \
