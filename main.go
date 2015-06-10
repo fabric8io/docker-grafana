@@ -25,20 +25,20 @@ func (c *Context) Env() map[string]string {
 func main() {
 	influxDbUrl := os.Getenv("INFLUXDB_URL")
 	if len(influxDbUrl) == 0 && len(os.Getenv("INFLUXDB_SERVICE_NAME")) > 0 {
-		os.Setenv("INFLUXDB_URL", "")
-		influxDbServiceUrl := "${INFLUXDB_PROTO}://${" +
+		influxDbUrl = "${INFLUXDB_PROTO}://${" +
 			os.Getenv("INFLUXDB_SERVICE_NAME") + "_SERVICE_HOST}:${" +
 			os.Getenv("INFLUXDB_SERVICE_NAME") + "_SERVICE_PORT}/"
-		if url, err := url.Parse(os.ExpandEnv(influxDbServiceUrl)); err == nil {
-			http.Handle("/db/", httputil.NewSingleHostReverseProxy(url))
-			log.Println("Using reverse proxy to ", url)
-			os.Setenv("GRAFANA_DEFAULT_DASHBOARD", "/dashboard/file/kubernetes.json")
-		} else {
-			log.Fatal(err)
-		}
 	} else {
-		os.Setenv("INFLUXDB_URL", os.ExpandEnv(influxDbUrl))
 		log.Println("Using ", os.Getenv("INFLUXDB_URL"))
+	}
+	os.Setenv("INFLUXDB_URL", "")
+	influxDbUrl = os.ExpandEnv(influxDbUrl)
+
+	if url, err := url.Parse(influxDbUrl); err == nil {
+		http.Handle("/db/", httputil.NewSingleHostReverseProxy(url))
+		log.Println("Using reverse proxy to ", url)
+	} else {
+		log.Fatal(err)
 	}
 
 	if len(os.Getenv("INFLUXDB_USER")) == 0 {
