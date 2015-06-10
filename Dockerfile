@@ -1,7 +1,7 @@
 FROM gliderlabs/alpine:3.2
 MAINTAINER Jimmi Dyson <jimmidyson@gmail.com>
 ENTRYPOINT ["/opt/grafana/grafana"]
-EXPOSE 80
+EXPOSE 3000
 
 ENV GRAFANA_VERSION 1.9.1
 ENV INFLUXDB_NAME k8s
