@@ -27,6 +27,7 @@ RUN apk-install go git mercurial ca-certificates openssl tar gzip \
 
 COPY config.js.tmpl /opt/grafana/config.js.tmpl
 COPY kubernetes-dashboard.json /opt/grafana/app/dashboards/kubernetes.json
+RUN chmod 777 /opt/grafana/
 
 WORKDIR /opt/grafana
 
