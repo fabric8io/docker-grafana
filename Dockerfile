@@ -1,34 +1,18 @@
-FROM gliderlabs/alpine:3.2
+FROM centos:7
 MAINTAINER Jimmi Dyson <jimmidyson@gmail.com>
-ENTRYPOINT ["/opt/grafana/grafana"]
+ENTRYPOINT ["/usr/sbin/grafana-server", "--homepath=/usr/share/grafana", "--config=/etc/grafana/grafana.ini"]
 EXPOSE 3000
 
-ENV GRAFANA_VERSION 1.9.1
-ENV INFLUXDB_NAME k8s
-ENV GRAFANA_DB_NAME grafana
-ENV GRAFANA_DEFAULT_DASHBOARD /dashboard/file/default.json
-ENV INFLUXDB_PROTO http
-ENV INFLUXDB_USER root
-ENV INFLUXDB_PASSWORD root
+ENV GRAFANA_VERSION 2.0.2
+ENV GF_LOG_MODE console
+ENV GF_PATHS_DATA /var/lib/grafana
+ENV GF_PATHS_LOGS /var/lib/grafana
+ENV GF_AUTH_ANONYMOUS_ENABLED true
 
-COPY . /go/src/github.com/fabric8io/docker-grafana
+RUN rpm --import https://grafanarel.s3.amazonaws.com/RPM-GPG-KEY-grafana && \
+    yum install -y https://grafanarel.s3.amazonaws.com/builds/grafana-${GRAFANA_VERSION}-1.x86_64.rpm && \
+    chmod 777 /var/lib/grafana && \
+    curl -L https://github.com/grafana/grafana-plugins/archive/master.tar.gz | tar xvz -C /usr/share/grafana/public/app/plugins/datasource/ --strip-components=2 grafana-plugins-master/datasources/prometheus
 
-RUN apk-install go git mercurial ca-certificates openssl tar gzip \
-  && mkdir /opt \
-  && wget -q -O - http://grafanarel.s3.amazonaws.com/grafana-${GRAFANA_VERSION}.tar.gz | gzip -dc | tar xv -C /opt \
-  && mv /opt/grafana-${GRAFANA_VERSION} /opt/grafana \
-  && export GOPATH=/go \
-  && export PATH=${GOPATH}/bin:${PATH} \
-  && cd ${GOPATH}/src/github.com/fabric8io/docker-grafana/ \
-  && go build -ldflags "-X main.Version $(cat VERSION)" -o /opt/grafana/grafana \
-  && rm -rf ${GOPATH} \
-  && apk del go git mercurial tar gzip \
-  && chown nobody:nobody /opt/grafana/
-
-COPY config.js.tmpl /opt/grafana/config.js.tmpl
-COPY kubernetes-dashboard.json /opt/grafana/app/dashboards/kubernetes.json
-RUN chmod 777 /opt/grafana/
-
-WORKDIR /opt/grafana
-
-USER nobody
+VOLUME /var/lib/grafana
+USER grafana
