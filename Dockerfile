@@ -3,12 +3,11 @@ MAINTAINER Jimmi Dyson <jimmidyson@gmail.com>
 ENTRYPOINT ["/usr/sbin/grafana-server", "--homepath=/usr/share/grafana", "--config=/etc/grafana/grafana.ini"]
 EXPOSE 3000
 
-ENV GRAFANA_VERSION 2.1.0
+ENV GRAFANA_VERSION 2.1.3
 ENV GF_LOG_MODE console
 ENV GF_PATHS_DATA /var/lib/grafana
 ENV GF_PATHS_LOGS /var/lib/grafana
 ENV GF_AUTH_ANONYMOUS_ENABLED true
-ENV GF_AUTH_PROXY_ENABLED true
 
 RUN rpm --import https://grafanarel.s3.amazonaws.com/RPM-GPG-KEY-grafana && \
     yum install -y https://grafanarel.s3.amazonaws.com/builds/grafana-${GRAFANA_VERSION}-1.x86_64.rpm && \
