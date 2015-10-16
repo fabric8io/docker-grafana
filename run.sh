@@ -46,14 +46,6 @@ if [ ! -f /var/lib/grafana/.configured ]; then
   }'
 
   echo ""
-  echo "Importing default dashboards..."
-  for filename in ${DASHBOARD_LOCATION}/*.json; do
-    echo "Importing ${filename} ..."
-    curl -sS -i -XPOST -d "{\"dashboard\":`cat ${filename}`,\"overwrite\": true}" -H "${HEADER_ACCEPT}" -H "${HEADER_CONTENT_TYPE}" "http://${GRAFANA_USER}:${GRAFANA_PASSWD}@localhost:3000/api/dashboards/db"
-    echo ""
-    echo "Done importing ${filename}"
-  done
-  echo ""
 fi
 
 wait $pid
