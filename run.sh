@@ -45,6 +45,7 @@ if [ ! -f /var/lib/grafana/.configured ]; then
     "url": "'"${PROMETHEUS_ADDRESS}"'"
   }'
 
+  touch /var/lib/grafana/.configured
   echo ""
 fi
 
