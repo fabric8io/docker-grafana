@@ -24,7 +24,7 @@ echo "Starting Grafana in the background"
   --homepath=/usr/share/grafana \
   config=/etc/grafana/grafana.ini \
   cfg:default.paths.data=/var/lib/grafana \
-  cfg:default.paths.logs=/var/log/grafana &
+  cfg:default.log.mode=console &
 pid=$!
 
 echo "Waiting for Grafana to start..."
