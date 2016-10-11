@@ -1,4 +1,4 @@
-FROM grafana/grafana:2.5.0
+FROM grafana/grafana:2.6.0
 MAINTAINER Jimmi Dyson <jimmidyson@gmail.com>
 
 ENTRYPOINT ["/run.sh"]
@@ -16,5 +16,6 @@ RUN apt-get update && \
 
 ADD run.sh /run.sh
 ADD dashboards /dashboards
+RUN chmod 777 /dashboards && chmod 666 /dashboards/*
 
 USER grafana
