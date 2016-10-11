@@ -293,7 +293,7 @@
         "name": "namespace",
         "options": [
         ],
-        "query": "label_values(kubernetes_namespace)",
+        "query": "label_values(namespace)",
         "refresh": true,
         "refresh_on_load": false,
         "type": "query"
@@ -316,7 +316,7 @@
             "selected": true
           }
         ],
-        "query": "camel_routes_lastprocessingtime{kubernetes_namespace=\"$namespace\"}",
+        "query": "camel_routes_lastprocessingtime{namespace=\"$namespace\"}",
         "refresh": true,
         "refresh_on_load": false,
         "regex": "/project=\"([^\"]+)\"/",
@@ -340,7 +340,7 @@
             "selected": true
           }
         ],
-        "query": "camel_routes_lastprocessingtime{kubernetes_namespace=\"$namespace\"}\t",
+        "query": "camel_routes_lastprocessingtime{namespace=\"$namespace\"}\t",
         "refresh_on_load": false,
         "regex": "/version=\"([^\"]+)\"/",
         "type": "query"
