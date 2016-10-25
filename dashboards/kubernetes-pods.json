@@ -40,9 +40,9 @@
           "prefixFontSize": "50%",
           "scopedVars": {
             "pod": {
+              "selected": false,
               "text": "nginx-1-e3vya",
-              "value": "nginx-1-e3vya",
-              "selected": false
+              "value": "nginx-1-e3vya"
             }
           },
           "span": 2,
@@ -54,9 +54,10 @@
           },
           "targets": [
             {
-              "expr": "time() - max(container_start_time_seconds{job=\"kubernetes-nodes\", namespace=\"$namespace\", pod_name=\"$pod\"})",
+              "expr": "time() - max(container_start_time_seconds{job=\"kubernetes-nodes\", container_label_io_kubernetes_pod_namespace=\"$namespace\", container_label_io_kubernetes_pod_name=\"$pod\"})",
               "intervalFactor": 2,
-              "refId": "A"
+              "refId": "A",
+              "step": 600
             }
           ],
           "thresholds": "",
@@ -111,9 +112,9 @@
           "renderer": "flot",
           "scopedVars": {
             "pod": {
+              "selected": false,
               "text": "nginx-1-e3vya",
-              "value": "nginx-1-e3vya",
-              "selected": false
+              "value": "nginx-1-e3vya"
             }
           },
           "seriesOverrides": [],
@@ -122,18 +123,20 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(container_memory_usage_bytes{job=\"kubernetes-nodes\", namespace=\"$namespace\", pod_name=\"$pod\"})",
+              "expr": "sum(container_memory_usage_bytes{job=\"kubernetes-nodes\", container_label_io_kubernetes_pod_namespace=\"$namespace\", container_label_io_kubernetes_pod_name=\"$pod\"})",
               "interval": "",
               "intervalFactor": 2,
               "legendFormat": "Used",
-              "refId": "A"
+              "refId": "A",
+              "step": 60
             },
             {
-              "expr": "sum(container_memory_working_set_bytes{job=\"kubernetes-nodes\", namespace=\"$namespace\", pod_name=\"$pod\"})",
+              "expr": "sum(container_memory_working_set_bytes{job=\"kubernetes-nodes\", container_label_io_kubernetes_pod_namespace=\"$namespace\", container_label_io_kubernetes_pod_name=\"$pod\"})",
               "interval": "",
               "intervalFactor": 2,
               "legendFormat": "Working",
-              "refId": "B"
+              "refId": "B",
+              "step": 60
             }
           ],
           "timeFrom": null,
@@ -190,9 +193,9 @@
           "renderer": "flot",
           "scopedVars": {
             "pod": {
+              "selected": false,
               "text": "nginx-1-e3vya",
-              "value": "nginx-1-e3vya",
-              "selected": false
+              "value": "nginx-1-e3vya"
             }
           },
           "seriesOverrides": [],
@@ -201,24 +204,27 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(irate(container_cpu_usage_seconds_total{job=\"kubernetes-nodes\", namespace=\"$namespace\", pod_name=\"$pod\"}[5m]))",
+              "expr": "sum(irate(container_cpu_usage_seconds_total{job=\"kubernetes-nodes\", container_label_io_kubernetes_pod_namespace=\"$namespace\", container_label_io_kubernetes_pod_name=\"$pod\"}[5m]))",
               "intervalFactor": 2,
               "legendFormat": "Total",
-              "refId": "A"
+              "refId": "A",
+              "step": 60
             },
             {
-              "expr": "sum(irate(container_cpu_system_seconds_total{job=\"kubernetes-nodes\", namespace=\"$namespace\", pod_name=\"$pod\"}[5m]))",
+              "expr": "sum(irate(container_cpu_system_seconds_total{job=\"kubernetes-nodes\", container_label_io_kubernetes_pod_namespace=\"$namespace\", container_label_io_kubernetes_pod_name=\"$pod\"}[5m]))",
               "interval": "",
               "intervalFactor": 2,
               "legendFormat": "Kernel",
-              "refId": "B"
+              "refId": "B",
+              "step": 60
             },
             {
-              "expr": "sum(irate(container_cpu_user_seconds_total{job=\"kubernetes-nodes\", namespace=\"$namespace\", pod_name=\"$pod\"}[5m]))",
+              "expr": "sum(irate(container_cpu_user_seconds_total{job=\"kubernetes-nodes\", container_label_io_kubernetes_pod_namespace=\"$namespace\", container_label_io_kubernetes_pod_name=\"$pod\"}[5m]))",
               "interval": "",
               "intervalFactor": 2,
               "legendFormat": "User",
-              "refId": "C"
+              "refId": "C",
+              "step": 60
             }
           ],
           "timeFrom": null,
@@ -240,9 +246,9 @@
       "repeat": "pod",
       "scopedVars": {
         "pod": {
+          "selected": false,
           "text": "default",
-          "value": "default",
-          "selected": false
+          "value": "default"
         }
       },
       "showTitle": true,
@@ -254,6 +260,7 @@
     "to": "now"
   },
   "timepicker": {
+    "now": true,
     "refresh_intervals": [
       "5s",
       "10s",
@@ -276,16 +283,16 @@
       "2d",
       "7d",
       "30d"
-    ],
-    "now": true
+    ]
   },
   "templating": {
     "list": [
       {
         "allFormat": "glob",
         "current": {
-          "text": "default",
-          "value": "default"
+          "text": "None",
+          "value": "",
+          "isNone": true
         },
         "datasource": null,
         "includeAll": false,
@@ -294,12 +301,13 @@
         "name": "namespace",
         "options": [
           {
-            "text": "default",
-            "value": "default",
+            "text": "None",
+            "value": "",
+            "isNone": true,
             "selected": true
           }
         ],
-        "query": "label_values(namespace)",
+        "query": "label_values(container_label_io_kubernetes_pod_namespace)",
         "refresh": true,
         "refresh_on_load": true,
         "regex": "",
@@ -309,8 +317,7 @@
         "allFormat": "glob",
         "current": {
           "text": "All",
-          "value": "{nginx-1-e3vya,prometheus-1di4t,quickstart-cdi-camel-khiam,quickstart-cdi-cxf-x7beq,router-1-jgi9o}",
-          "tags": []
+          "value": "{}"
         },
         "datasource": null,
         "includeAll": true,
@@ -320,11 +327,11 @@
         "options": [
           {
             "text": "All",
-            "value": "default",
+            "value": "{}",
             "selected": true
           }
         ],
-        "query": "container_start_time_seconds{namespace=\"$namespace\"}",
+        "query": "container_start_time_seconds{container_label_io_kubernetes_pod_namespace=\"$namespace\"}",
         "refresh": true,
         "refresh_on_load": true,
         "regex": "/pod_name=\"([^\"]+)\"/",
@@ -335,7 +342,7 @@
   "annotations": {
     "list": []
   },
-  "schemaVersion": 7,
-  "version": 16,
+  "schemaVersion": 8,
+  "version": 0,
   "links": []
 }
