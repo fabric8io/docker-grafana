@@ -22,7 +22,7 @@ DASHBOARD_LOCATION=${DASHBOARD_LOCATION:-'/dashboards'}
 echo "Starting Grafana in the background"
 /usr/sbin/grafana-server \
   --homepath=/usr/share/grafana \
-  config=/etc/grafana/grafana.ini \
+  --config=/etc/grafana/grafana.ini \
   cfg:default.paths.data=/var/lib/grafana \
   cfg:default.log.mode=console &
 pid=$!
