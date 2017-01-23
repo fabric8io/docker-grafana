@@ -1,5 +1,5 @@
-FROM grafana/grafana:2.6.0
-MAINTAINER Jimmi Dyson <jimmidyson@gmail.com>
+FROM grafana/grafana:4.1.1
+MAINTAINER Jimmi Dyson <jimmidyson@gmail.com>, Kamesh Sampath <kamesh.sampath@hotmail.com>
 
 ENTRYPOINT ["/run.sh"]
 
